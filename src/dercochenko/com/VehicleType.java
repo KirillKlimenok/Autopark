@@ -9,9 +9,6 @@ public class VehicleType {
         this.taxCoefficient = taxCoefficient;
     }
 
-    public VehicleType() {
-    }
-
     public String getTypeName() {
         return typeName;
     }
