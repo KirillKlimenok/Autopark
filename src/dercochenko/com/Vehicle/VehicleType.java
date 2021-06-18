@@ -1,4 +1,4 @@
-package dercochenko.com;
+package dercochenko.com.Vehicle;
 
 import java.util.ArrayList;
 

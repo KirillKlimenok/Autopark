@@ -1,5 +1,11 @@
 package dercochenko.com;
 
+import dercochenko.com.Vehicle.Engine.CombustionEngine;
+import dercochenko.com.Vehicle.Engine.ElectricalEngine;
+import dercochenko.com.Vehicle.Engine.Startable;
+import dercochenko.com.Vehicle.Vehicle;
+import dercochenko.com.Vehicle.VehicleType;
+
 public class TechnicalSpecialist {
     private static final int LOWER_LIMIT_MANUFACTURE_YEAR = 1886;
 
@@ -39,10 +45,18 @@ public class TechnicalSpecialist {
     }
 
     static public boolean validateModelName(String str) {
-        if (str == null) {
-            return false;
+        return !str.isEmpty();
+    }
+
+    static public boolean validateEngine(Startable startable) {
+        if (startable instanceof ElectricalEngine engine) {
+            return engine.getElectricityConsumption() > 0 && engine.getBatterySize() > 0;
         } else {
-            return !str.isEmpty();
+            if (startable instanceof CombustionEngine engine) {
+                return engine.getFuelTankCapacity() > 0 && engine.getFuelConsumptionPer100() > 0 && engine.getTaxPerMonth() > 0;
+            } else {
+                return false;
+            }
         }
     }
 }

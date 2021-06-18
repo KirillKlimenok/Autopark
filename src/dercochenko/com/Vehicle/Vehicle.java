@@ -1,4 +1,7 @@
-package dercochenko.com;
+package dercochenko.com.Vehicle;
+
+import dercochenko.com.Vehicle.Engine.AbstractEngine;
+import dercochenko.com.Vehicle.Engine.Startable;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,8 +18,9 @@ public class Vehicle {
     private Enum<Color> color;
     private double tankCapacity;
     private final static ArrayList<Vehicle> vehicles = new ArrayList<>();
+    private final Startable engine;
 
-    enum Color {
+    public enum Color {
         Red("Red"),
         Grey("Grey"),
         LightBlue("Light Blue"),
@@ -42,15 +46,15 @@ public class Vehicle {
 
     }
 
-    public static void addNewVehicle(VehicleType vehicleType, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
+    public static void addNewVehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
         try {
-            vehicles.add(new Vehicle(vehicleType, modelCar, stateNumber, weight, manufactureYear, mileage, color, tankCapacity));
+            vehicles.add(new Vehicle(vehicleType, startable, modelCar, stateNumber, weight, manufactureYear, mileage, color, tankCapacity));
         } catch (ExceptionInInitializerError | IllegalArgumentException e) {
             System.out.println("You enter incorrect auto, this auto don't created !");
         }
     }
 
-    public Vehicle(VehicleType vehicleType, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
+    public Vehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
         if (!validateVehicleType(vehicleType.getTypeName())) {
             System.out.println("Incorrect type vehicle!");
             throw new ExceptionInInitializerError();
@@ -72,7 +76,11 @@ public class Vehicle {
         } else if (!validateColorString(color)) {
             System.out.println("Incorrect color!");
             throw new ExceptionInInitializerError();
+        } else if (!validateEngine(startable)) {
+            System.out.println("Incorrect engine!");
+            throw new ExceptionInInitializerError();
         } else {
+            this.engine = startable;
             this.vehicleType = vehicleType;
             this.modelCar = modelCar;
             this.stateNumber = stateNumber;
@@ -85,7 +93,7 @@ public class Vehicle {
     }
 
     public double getCalcTaxPerMonth() {
-        return (weight * 0.0013) + (vehicleType.getTaxCoefficient() * 30) + 5;
+        return (weight * 0.0013) + (vehicleType.getTaxCoefficient() * engine.getTaxPerMonth() * 30) + 5;
     }
 
     public int compareTo(Vehicle o) {
@@ -101,14 +109,15 @@ public class Vehicle {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || o instanceof AbstractEngine) return false;
         Vehicle vehicle = (Vehicle) o;
-        return vehicleType.equals(vehicle.vehicleType) && modelCar.equals(vehicle.modelCar);
+        boolean isEqualsEngine = engine.equals(((Vehicle) o).engine);
+        return vehicleType.equals(vehicle.vehicleType) && modelCar.equals(vehicle.modelCar) && isEqualsEngine;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(vehicleType, modelCar);
+        return Objects.hash(vehicleType, modelCar, engine);
     }
 
     @Override
@@ -117,6 +126,9 @@ public class Vehicle {
             return "Incorrect auto";
         }
         return vehicleType +
+                "," + engine +
+                ", maxKm: " +
+                engine.getMaxKilometers() +
                 ", " + modelCar +
                 ", " + stateNumber +
                 ", " + weight + " kg" +
@@ -124,6 +136,10 @@ public class Vehicle {
                 ", " + mileage + " km" +
                 ", " + color +
                 ", " + tankCapacity + "l" + '\n';
+    }
+
+    public Startable getEngine() {
+        return engine;
     }
 
     public VehicleType getVehicleType() {
@@ -188,7 +204,7 @@ public class Vehicle {
     }
 
     public void setTankCapacity(double tankCapacity) {
-        if(tankCapacity > 0) this.tankCapacity = tankCapacity;
+        if (tankCapacity > 0) this.tankCapacity = tankCapacity;
         else System.out.println("Incorrect data, you entered incorrect tank capacity");
     }
 }
