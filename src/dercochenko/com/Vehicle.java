@@ -61,7 +61,7 @@ public class Vehicle {
                 return 0;
             } else return (int) (mileage - o.mileage);
         } else {
-            return (int) (Integer.parseInt(manufactureYear) - Integer.parseInt(o.manufactureYear));
+            return Integer.parseInt(manufactureYear) - Integer.parseInt(o.manufactureYear);
         }
     }
 
