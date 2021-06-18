@@ -1,62 +1,58 @@
 package dercochenko.com;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
-        VehicleType[] types = new VehicleType[]{
-                new VehicleType("Bus", 1.2),
-                new VehicleType("Car", 1),
-                new VehicleType("Rink", 1.5),
-                new VehicleType("Tractor", 1.2)};
+        VehicleType.addVehicleTypeInList("Bus", 1.2);
+        VehicleType.addVehicleTypeInList("Car", 1);
+        VehicleType.addVehicleTypeInList("Rink", 1.5);
+        VehicleType.addVehicleTypeInList("Tractor", 1.2);
 
-        Vehicle[] vehicles = new Vehicle[]{
-                new Vehicle(types[0], "Volkswagen Crafter", "5427 AX-7", 2022, "2015", 376000, Vehicle.Color.Blue, 60),
-                new Vehicle(types[0], "Volkswagen Crafter", "6427 AA-7", 2500, "2014", 227010, Vehicle.Color.White, 50),
-                new Vehicle(types[0], "Electric bus E321", "6785 BA-7", 12080, "2019", 20451, Vehicle.Color.Green, 80),
-                new Vehicle(types[1], "Golf 5", "8682 AX-7", 1200, "2006", 230451, Vehicle.Color.Grey, 55),
-                new Vehicle(types[1], "Tesla Model S 70D", "E001 AA-7", 2200, "2019", 10454, Vehicle.Color.White, 65),
-                new Vehicle(types[2], "Hamm HD 12 VV", null, 3000, "2016", 122, Vehicle.Color.Yellow, 70),
-                new Vehicle(types[3], "МТЗ Беларус-1025.4", "1145 AB-7", 1200, "2020", 109, Vehicle.Color.Red, 75),
-        };
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), "Volkswagen Crafter", "5427 AX-7", 2022, 2015, 376000, "Blue", 60);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), "Volkswagen Crafter", "6427 AA-7", 2500, 2025, 227010, "White", 50);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), "Electric bus E321", "6785 BA-7", 12080, 2019, 20451, "Green", 80);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(1), "Golf 5", "8682 AX-7", 1200, 2016, 230451, "Grey", 55);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(1), "Tesla Model S 70D", "0001 AA-7", 2200, 2009, 10454, "White", 65);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(2), null, "1561 FF-8", 3000, 2016, 122, "Yellow", 70);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(3), "МТЗ Беларус-1025.4", "1145 AB-7", 1200, 2020, 109, "Red", 75);
 
-        printAllVehicle(vehicles);
+        Vehicle.getVehicles().forEach(System.out::print);
 
-        sortVehicle(vehicles);
-        System.out.println();
-
-        printAllVehicle(vehicles);
+        sortVehicle(Vehicle.getVehicles());
 
         System.out.println();
 
-        printMaxAndMinMileage(vehicles);
+        Vehicle.getVehicles().forEach(System.out::print);
+
+        System.out.println();
+
+        printMaxAndMinMileage(Vehicle.getVehicles());
     }
 
-    public static void printAllVehicle(Vehicle[] vehicles) {
-        System.out.println(Arrays.toString(vehicles));
-    }
+    public static void sortVehicle(ArrayList<Vehicle> vehicles) { // O = n^2
+        for (int i = 0; i < vehicles.size(); i++) {
+            for (int j = 0; j < vehicles.size() - 1; j++) {
+                if (vehicles.get(j).compareTo(vehicles.get(j + 1)) < 0) {
+                    Vehicle vehicle = vehicles.get(j);
+                    Vehicle.setVehiclesForId(j, vehicles.get(j + 1));
+                    Vehicle.setVehiclesForId(j + 1, vehicle);
 
-    public static void sortVehicle(Vehicle[] vehicles) { // O = n^2
-        for (int j = 0; j < vehicles.length; j++)
-            for (int i = 0; i < vehicles.length - 1; i++) {
-                Vehicle vehicle;
-                if (vehicles[i].compareTo(vehicles[i + 1]) < 0) {
-                    vehicle = vehicles[i];
-                    vehicles[i] = vehicles[i + 1];
-                    vehicles[i + 1] = vehicle;
+                    vehicles = Vehicle.getVehicles();
                 }
             }
+        }
     }
 
-    public static void printMaxAndMinMileage(Vehicle[] vehicles) {
-        Vehicle maxMileage = vehicles[0];
-        Vehicle minMileage = vehicles[0];
+    public static void printMaxAndMinMileage(ArrayList<Vehicle> vehicles) {
+        Vehicle maxMileage = vehicles.get(0);
+        Vehicle minMileage = vehicles.get(0);
 
-        for (int i = 1; i < vehicles.length; i++) {
-            if (maxMileage.getMileage() < vehicles[i].getMileage()) maxMileage = vehicles[i];
+        for (int i = 1; i < vehicles.size(); i++) {
+            if (maxMileage.getMileage() < vehicles.get(i).getMileage()) maxMileage = vehicles.get(i);
 
-            if (minMileage.getMileage() > vehicles[i].getMileage()) minMileage = vehicles[i];
+            if (minMileage.getMileage() > vehicles.get(i).getMileage()) minMileage = vehicles.get(i);
         }
 
         System.out.println("Car With max mileage: " + maxMileage.toString());

@@ -1,12 +1,21 @@
 package dercochenko.com;
 
+import java.util.ArrayList;
+
 public class VehicleType {
     private String typeName;
     private double taxCoefficient;
+    public static ArrayList<VehicleType> vehicleTypes = new ArrayList<>();
 
     public VehicleType(String typeName, double taxCoefficient) {
         this.typeName = typeName;
         this.taxCoefficient = taxCoefficient;
+    }
+
+    public static void addVehicleTypeInList(String typeName, double taxCoefficient) {
+        if (taxCoefficient >= 0 && typeName != null) {
+            vehicleTypes.add(new VehicleType(typeName, taxCoefficient));
+        }
     }
 
     public String getTypeName() {
@@ -35,8 +44,7 @@ public class VehicleType {
 
     @Override
     public String toString() {
-        return "typeName='" + typeName + '\'' +
-                ", taxCoefficient=" + taxCoefficient +
-                '}';
+        return typeName +
+                ", taxCoefficient=" + taxCoefficient;
     }
 }
