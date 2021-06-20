@@ -20,32 +20,6 @@ public class Vehicle {
     private final static ArrayList<Vehicle> vehicles = new ArrayList<>();
     private final Startable engine;
 
-    public enum Color {
-        Red("Red"),
-        Grey("Grey"),
-        LightBlue("Light Blue"),
-        Blue("Blue"),
-        Green("Green"),
-        Yellow("Yellow"),
-        Pink("Pink"),
-        Orange("Orange"),
-        Brown("Brown"),
-        White("White"),
-        Black("Black"),
-        Violet("Violet");
-
-        private final String color;
-
-        Color(String color) {
-            this.color = color;
-        }
-
-        public String getColor() {
-            return this.color;
-        }
-
-    }
-
     public static void addNewVehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
         try {
             vehicles.add(new Vehicle(vehicleType, startable, modelCar, stateNumber, weight, manufactureYear, mileage, color, tankCapacity));
@@ -156,7 +130,7 @@ public class Vehicle {
 
     //return clone List Vehicle
     public static ArrayList<Vehicle> getVehicles() {
-        return (ArrayList<Vehicle>) vehicles.clone();
+        return new ArrayList<>(vehicles);
     }
 
     public static void setVehiclesForId(int id, Vehicle vehicle) {
