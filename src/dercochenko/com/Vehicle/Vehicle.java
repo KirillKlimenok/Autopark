@@ -23,36 +23,28 @@ public class Vehicle {
     public static void addNewVehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
         try {
             vehicles.add(new Vehicle(vehicleType, startable, modelCar, stateNumber, weight, manufactureYear, mileage, color, tankCapacity));
-        } catch (ExceptionInInitializerError | IllegalArgumentException e) {
-            System.out.println("You enter incorrect auto, this auto don't created !");
+        } catch (NotVehicleException e) {
+            System.out.println(e.getMessage() + " You enter incorrect auto, this auto don't created !");
         }
     }
 
-    public Vehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
+    private Vehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) throws NotVehicleException {
         if (!validateVehicleType(vehicleType.getTypeName())) {
-            System.out.println("Incorrect type vehicle!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect type vehicle!");
         } else if (!validateModelName(modelCar)) {
-            System.out.println("Incorrect model name!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect model name!");
         } else if (!validateRegistrationNumber(stateNumber)) {
-            System.out.println("Incorrect state number!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect state number!");
         } else if (!validateWeight(weight)) {
-            System.out.println("Incorrect weight!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect weight!");
         } else if (!validateManufactureYear(manufactureYear)) {
-            System.out.println("Incorrect manufacture error!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect manufacture error!");
         } else if (!validateMileage(mileage)) {
-            System.out.println("Incorrect mileage!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect mileage!");
         } else if (!validateColorString(color)) {
-            System.out.println("Incorrect color!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect color!");
         } else if (!validateEngine(startable)) {
-            System.out.println("Incorrect engine!");
-            throw new ExceptionInInitializerError();
+            throw new NotVehicleException("Incorrect engine!");
         } else {
             this.engine = startable;
             this.vehicleType = vehicleType;

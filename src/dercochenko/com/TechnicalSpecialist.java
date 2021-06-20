@@ -1,5 +1,6 @@
 package dercochenko.com;
 
+import dercochenko.com.Vehicle.Color;
 import dercochenko.com.Vehicle.Engine.CombustionEngine;
 import dercochenko.com.Vehicle.Engine.ElectricalEngine;
 import dercochenko.com.Vehicle.Engine.Startable;
@@ -23,7 +24,7 @@ public class TechnicalSpecialist {
 
     public static boolean validateColorString(String color) {
         try {
-            Vehicle.Color.valueOf(color);
+            Color.valueOf(color);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -45,6 +46,9 @@ public class TechnicalSpecialist {
     }
 
     static public boolean validateModelName(String str) {
+        if (str == null) {
+            return false;
+        }
         return !str.isEmpty();
     }
 

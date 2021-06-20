@@ -16,7 +16,7 @@ public class Main {
         VehicleType.addVehicleTypeInList("Rink", 1.5);
         VehicleType.addVehicleTypeInList("Tractor", 1.2);
 
-        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), new GasolineEngine(75, 8.1), "Volkswagen Crafter", "5427 AX-7", 2022, 2015, 376000, "Blue", 60);
+        Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), new GasolineEngine(75, 8.1), null, "5427 AX-7", 2022, 2015, 376000, "Blue", 60);
         Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), new GasolineEngine(75, 8.1), "Volkswagen Crafter", "6427 AA-7", 2500, 2025, 227010, "White", 50);
         Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(0), new ElectricalEngine(150, 50), "Electric bus E321", "6785 BA-7", 12080, 2019, 20451, "Green", 80);
         Vehicle.addNewVehicle(VehicleType.vehicleTypes.get(1), new DieselEngine(55, 7.2), "Golf 5", "8682 AX-7", 1200, 2016, 230451, "Grey", 55);
