@@ -1,4 +1,4 @@
-package dercochenko.com;
+package dercochenko.com.Garage;
 
 import dercochenko.com.Vehicle.Vehicle;
 import dercochenko.com.Vehicle.VehicleStack;

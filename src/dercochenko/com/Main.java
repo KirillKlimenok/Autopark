@@ -1,13 +1,17 @@
 package dercochenko.com;
 
+import dercochenko.com.Garage.Garage;
+import dercochenko.com.Garage.MechanicService;
+import dercochenko.com.Vehicle.DefectedVehicleException;
 import dercochenko.com.Vehicle.Vehicle;
-import dercochenko.com.Vehicle.VehicleArrayDeque;
-import dercochenko.com.Vehicle.VehicleStack;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayDeque;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -15,13 +19,61 @@ public class Main {
         init();
 
         VehicleCollection vehicleCollection = new VehicleCollection("D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\types.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\vehicles.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\rents.csv");
+        MechanicService myMechanic = new MechanicService();
+
         vehicleCollection.init();
 
         Garage myGarage = new Garage();
 
         myGarage.fullingGarage(vehicleCollection.getVehicleList());
 
+        for (Vehicle v :
+                vehicleCollection.getVehicleList()) {
+            if (myMechanic.detectAndRepair(v)) {
+                System.out.println("The car" + v.getId() + " is repaired");
+            } else {
+                System.out.println("The car" + v.getId() + " was not damaged");
+            }
+        }
+
+        int maxCountDetect = 0;
+        int idVehicle = 0;
+
+        for (Vehicle v : vehicleCollection.getVehicleList()) {
+            if (maxCountDetect < v.getCountDetected()) {
+                maxCountDetect = v.getCountDetected();
+                idVehicle = v.getId();
+            }
+        }
+
+        System.out.println("Vehicle" + idVehicle + " has detected: " + maxCountDetect);
+
         myGarage.garageRelease();
+
+        System.out.println("Do you want rent Auto" +
+                "\nthe cost of renting any car is 50$");
+
+
+        if (new Scanner(System.in).nextBoolean()) {
+            vehicleCollection.display();
+            RentAuto autoPark1 = new RentAuto(myMechanic);
+
+            System.out.println("enter vehicle: ");
+            try {
+                myMechanic.detectBreaking(vehicleCollection.getVehicle(2));
+                myMechanic.detectBreaking(vehicleCollection.getVehicle(3));
+                myMechanic.detectBreaking(vehicleCollection.getVehicle(4));
+
+                Vehicle v = vehicleCollection.getVehicle(new Scanner(System.in).nextInt());
+                System.out.println(v);
+                if (autoPark1.rentAuto(v, 50)) {
+                    System.out.println("successful");
+                }
+            } catch (DefectedVehicleException e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
 
     }
 

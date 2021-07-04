@@ -1,4 +1,4 @@
-package dercochenko.com;
+package dercochenko.com.Garage;
 
 import dercochenko.com.Vehicle.Color;
 import dercochenko.com.Vehicle.Engine.CombustionEngine;

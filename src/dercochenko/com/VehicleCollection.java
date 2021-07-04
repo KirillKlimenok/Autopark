@@ -39,7 +39,7 @@ public class VehicleCollection {
         vehicleList.forEach(System.out::println);
     }
 
-    public void sort(Comparator<Vehicle> comparator){
+    public void sort(Comparator<Vehicle> comparator) {
         vehicleList.sort(comparator);
     }
 
@@ -240,5 +240,9 @@ public class VehicleCollection {
 
     public List<Vehicle> getVehicleList() {
         return new ArrayList<>(vehicleList);
+    }
+
+    public Vehicle getVehicle(int id) {
+        return vehicleList.get(id - 1);
     }
 }

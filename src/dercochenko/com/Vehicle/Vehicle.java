@@ -1,14 +1,12 @@
 package dercochenko.com.Vehicle;
 
+import dercochenko.com.Garage.MechanicService;
 import dercochenko.com.Vehicle.Engine.AbstractEngine;
 import dercochenko.com.Vehicle.Engine.Startable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-import static dercochenko.com.TechnicalSpecialist.*;
+import static dercochenko.com.Garage.TechnicalSpecialist.*;
 
 public class Vehicle {
     private final VehicleType vehicleType;
@@ -23,6 +21,7 @@ public class Vehicle {
     private final int id;
     private static List<Rent> rentList;
     public static final Comparator<Vehicle> VEHICLE_COMPARATOR = Comparator.comparing(Vehicle::getModelCar);
+    private Map<String, Integer> vehicleDetailsBreaking;
 
     public static boolean setRentList(List<Rent> rent) {
         if (rent != null) {
@@ -69,13 +68,13 @@ public class Vehicle {
     }
 
     public double getTotalIncome() {
-       double sum = 0;
-       for (int i =0;i<rentList.size();i++){
-           if(rentList.get(i).getIdVehicle() == id){
-               sum+=rentList.get(i).getRentalPrice();
-           }
-       }
-       return sum;
+        double sum = 0;
+        for (int i = 0; i < rentList.size(); i++) {
+            if (rentList.get(i).getIdVehicle() == id) {
+                sum += rentList.get(i).getRentalPrice();
+            }
+        }
+        return sum;
     }
 
     public double getTotalProfit() {
@@ -175,6 +174,23 @@ public class Vehicle {
     public void setColor(String color) {
         if (validateColorString(color)) this.color = Color.valueOf(color);
         else System.out.println("Incorrect data, you entered incorrect color");
+    }
+
+    public int getCountDetected() {
+        int countDetected = 0;
+        for (int i = 0; i < MechanicService.details.length; i++) {
+            try {
+                countDetected += vehicleDetailsBreaking.get(MechanicService.details[i]);
+            } catch (NullPointerException ignored) {
+
+            }
+        }
+        return countDetected;
+    }
+
+    public void setVehicleDetailsBreaking(Map<String, Integer> vehicleDetailsBreaking) {
+        if (vehicleDetailsBreaking != null)
+            this.vehicleDetailsBreaking = vehicleDetailsBreaking;
     }
 
     public int getId() {
