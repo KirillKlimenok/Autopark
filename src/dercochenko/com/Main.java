@@ -1,9 +1,11 @@
 package dercochenko.com;
 
 import dercochenko.com.Vehicle.Vehicle;
+import dercochenko.com.Vehicle.VehicleArrayDeque;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.List;
 
 public class Main {
@@ -12,20 +14,22 @@ public class Main {
         init();
 
         VehicleCollection vehicleCollection = new VehicleCollection("D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\types.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\vehicles.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\rents.csv");
+        VehicleArrayDeque vehicleArrayDeque = new VehicleArrayDeque();
 
         vehicleCollection.init();
-
         vehicleCollection.display();
+        System.out.println("\n\n\n\n");
 
-//        vehicleCollection.delete(2);
-//
-//        vehicleCollection.display();
+        for (Vehicle v : vehicleCollection.getVehicleList()) {
+            vehicleArrayDeque.addLast(v);
+        }
 
-        vehicleCollection.sort(Vehicle.VEHICLE_COMPARATOR);
 
-        vehicleCollection.display();
+        for (int i = 0; i < vehicleArrayDeque.getCounter(); i++) {
+            vehicleArrayDeque.pollFirst();
+        }
 
-        System.out.println("Total Profit: " + getTotatProfit(vehicleCollection.getVehicleList()));
+        System.out.println(vehicleArrayDeque.getFirst());
 
     }
 
