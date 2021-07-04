@@ -162,10 +162,10 @@ public class VehicleCollection {
     }
 
     private void createVehicle(String line) {
-        ArrayList<String> vehicle = new ArrayList<String>(Arrays.asList(line.split(",")));
+        ArrayList<String> vehicle = new ArrayList<>(Arrays.asList(line.split(",")));
         for (String s :
                 vehicle) {
-            s = s.replace('\0', '\n');
+            s = s.replace(' ', '\0');
         }
         try {
             VehicleType vehicleType = createType(vehicle.get(1));
@@ -190,16 +190,16 @@ public class VehicleCollection {
 
     private Startable getEngine(String type, String fuelTankCapacity, String fuelConsumptionPer100) {
         switch (type) {
-            case "Electrical": {
+            case "Electrical" -> {
                 return new ElectricalEngine(Double.parseDouble(fuelTankCapacity.replace('"', '\n')), Double.parseDouble(fuelConsumptionPer100));
             }
-            case "Diesel": {
+            case "Diesel" -> {
                 return new DieselEngine(Double.parseDouble(fuelTankCapacity.replace('"', '\n')), Double.parseDouble(fuelConsumptionPer100));
             }
-            case "Gasoline": {
+            case "Gasoline" -> {
                 return new GasolineEngine(Double.parseDouble(fuelTankCapacity.replace('"', '\n')), Double.parseDouble(fuelConsumptionPer100));
             }
-            default: {
+            default -> {
                 return null;
             }
         }
