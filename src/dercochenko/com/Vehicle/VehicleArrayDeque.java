@@ -91,7 +91,6 @@ public class VehicleArrayDeque {
 
         System.arraycopy(vehicles, 1, vehicles, 0, vehicles.length - 1);
 
-        System.out.println("Car" + vehicle.getId() + ": washed up");
         return vehicle;
     }
 
@@ -105,8 +104,6 @@ public class VehicleArrayDeque {
         vehicles[counter - 1] = null;
 
         counter--;
-
-        System.out.println("Car" + vehicle.getId() + ": washed up");
 
         return vehicle;
     }

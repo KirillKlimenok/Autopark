@@ -2,6 +2,7 @@ package dercochenko.com;
 
 import dercochenko.com.Vehicle.Vehicle;
 import dercochenko.com.Vehicle.VehicleArrayDeque;
+import dercochenko.com.Vehicle.VehicleStack;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,22 +15,13 @@ public class Main {
         init();
 
         VehicleCollection vehicleCollection = new VehicleCollection("D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\types.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\vehicles.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\rents.csv");
-        VehicleArrayDeque vehicleArrayDeque = new VehicleArrayDeque();
-
         vehicleCollection.init();
-        vehicleCollection.display();
-        System.out.println("\n\n\n\n");
 
-        for (Vehicle v : vehicleCollection.getVehicleList()) {
-            vehicleArrayDeque.addLast(v);
-        }
+        Garage myGarage = new Garage();
 
+        myGarage.fullingGarage(vehicleCollection.getVehicleList());
 
-        for (int i = 0; i < vehicleArrayDeque.getCounter(); i++) {
-            vehicleArrayDeque.pollFirst();
-        }
-
-        System.out.println(vehicleArrayDeque.getFirst());
+        myGarage.garageRelease();
 
     }
 
@@ -50,8 +42,7 @@ public class Main {
         }
     }
 
-    public static double getTotatProfit(List<Vehicle> vehicles) {
+    public static double getTotalProfit(List<Vehicle> vehicles) {
         return vehicles.stream().mapToDouble(Vehicle::getTotalProfit).sum();
     }
-
 }
