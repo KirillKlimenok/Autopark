@@ -11,6 +11,12 @@ public abstract class CombustionEngine extends AbstractEngine {
     }
 
     @Override
+    public String toString() {
+        return super.toString()+"  " + fuelTankCapacity +
+                "  " + fuelConsumptionPer100;
+    }
+
+    @Override
     public double getTaxPerMonth() {
         return super.getTaxPerMonth();
     }

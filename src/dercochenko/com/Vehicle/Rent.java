@@ -1,12 +1,14 @@
-package dercochenko.com;
+package dercochenko.com.Vehicle;
 
 import java.util.Date;
 
 public class Rent {
+    private final int idVehicle;
     private Date rentalDate;
-    private float rentalPrice;
+    private double rentalPrice;
 
-    public Rent(Date rentalDate, float rentalPrice) {
+    public Rent(int idVehicle, Date rentalDate, float rentalPrice) {
+        this.idVehicle = idVehicle;
         this.rentalDate = rentalDate;
         this.rentalPrice = rentalPrice;
     }
@@ -19,11 +21,15 @@ public class Rent {
         this.rentalDate = rentalDate;
     }
 
-    public float getRentalPrice() {
+    public double getRentalPrice() {
         return rentalPrice;
     }
 
-    public void setRentalPrice(float rentalPrice) {
+    public void setRentalPrice(double rentalPrice) {
         this.rentalPrice = rentalPrice;
+    }
+
+    public int getIdVehicle() {
+        return idVehicle;
     }
 }

@@ -1,10 +1,10 @@
 package dercochenko.com.Vehicle;
 
-import dercochenko.com.Rent;
 import dercochenko.com.Vehicle.Engine.AbstractEngine;
 import dercochenko.com.Vehicle.Engine.Startable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,21 +18,23 @@ public class Vehicle {
     private final int manufactureYear;
     private double mileage;
     private Enum<Color> color;
-    private double tankCapacity;
-    private final static ArrayList<Vehicle> vehicles = new ArrayList<>();
     private final Startable engine;
+    private static int vehicleId = 1;
     private final int id;
-    private List<Rent> rentList;
+    private static List<Rent> rentList;
+    public static final Comparator<Vehicle> VEHICLE_COMPARATOR = Comparator.comparing(Vehicle::getModelCar);
 
-    public static void addNewVehicle(int id, VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) {
-        try {
-            vehicles.add(new Vehicle(id, vehicleType, startable, modelCar, stateNumber, weight, manufactureYear, mileage, color, tankCapacity));
-        } catch (NotVehicleException e) {
-            System.out.println(e.getMessage() + " You enter incorrect auto, this auto don't created !");
+    public static boolean setRentList(List<Rent> rent) {
+        if (rent != null) {
+            rentList = rent;
+            return true;
+        } else {
+            return false;
         }
+
     }
 
-    private Vehicle(int id ,VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color, double tankCapacity) throws NotVehicleException {
+    public Vehicle(VehicleType vehicleType, Startable startable, String modelCar, String stateNumber, double weight, int manufactureYear, double mileage, String color) throws NotVehicleException {
         if (!validateVehicleType(vehicleType.getTypeName())) {
             throw new NotVehicleException("Incorrect type vehicle!");
         } else if (!validateModelName(modelCar)) {
@@ -50,7 +52,7 @@ public class Vehicle {
         } else if (!validateEngine(startable)) {
             throw new NotVehicleException("Incorrect engine!");
         } else {
-            this.id = id;
+            this.id = vehicleId++;
             this.engine = startable;
             this.vehicleType = vehicleType;
             this.modelCar = modelCar;
@@ -59,16 +61,25 @@ public class Vehicle {
             this.manufactureYear = manufactureYear;
             this.mileage = mileage;
             this.color = Color.valueOf(color);
-            this.tankCapacity = tankCapacity;
         }
     }
 
-    public static double getTotalIncome(ArrayList<Vehicle> vehicles){
-       return vehicles.stream().mapToDouble(Vehicle::getTotalProfit).sum();
+    public static void resetCounter() {
+        vehicleId = 1;
     }
 
-    public double getTotalProfit(){
-        return 1.0;
+    public double getTotalIncome() {
+       double sum = 0;
+       for (int i =0;i<rentList.size();i++){
+           if(rentList.get(i).getIdVehicle() == id){
+               sum+=rentList.get(i).getRentalPrice();
+           }
+       }
+       return sum;
+    }
+
+    public double getTotalProfit() {
+        return getTotalIncome() - getCalcTaxPerMonth();
     }
 
     public double getCalcTaxPerMonth() {
@@ -101,20 +112,17 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        if (vehicleType == null) {
-            return "Incorrect auto";
-        }
-        return vehicleType +
-                "," + engine +
-                ", maxKm: " +
-                engine.getMaxKilometers() +
-                ", " + modelCar +
-                ", " + stateNumber +
-                ", " + weight + " kg" +
-                ", " + manufactureYear +
-                ", " + mileage + " km" +
-                ", " + color +
-                ", " + tankCapacity + "l" + '\n';
+        return id +
+                "    " + vehicleType +
+                "    " + modelCar +
+                "    " + stateNumber +
+                "    " + weight +
+                "    " + manufactureYear +
+                "    " + mileage +
+                "    " + color +
+                "    " + getTotalIncome() +
+                "    " + getCalcTaxPerMonth() +
+                "    " + getTotalProfit() + '\n';
     }
 
     public Startable getEngine() {
@@ -131,15 +139,6 @@ public class Vehicle {
 
     public String getStateNumber() {
         return stateNumber;
-    }
-
-    //return clone List Vehicle
-    public static ArrayList<Vehicle> getVehicles() {
-        return new ArrayList<>(vehicles);
-    }
-
-    public static void setVehiclesForId(int id, Vehicle vehicle) {
-        vehicles.set(id, vehicle);
     }
 
     public void setStateNumber(String stateNumber) {
@@ -178,12 +177,7 @@ public class Vehicle {
         else System.out.println("Incorrect data, you entered incorrect color");
     }
 
-    public double getTankCapacity() {
-        return tankCapacity;
-    }
-
-    public void setTankCapacity(double tankCapacity) {
-        if (tankCapacity > 0) this.tankCapacity = tankCapacity;
-        else System.out.println("Incorrect data, you entered incorrect tank capacity");
+    public int getId() {
+        return id;
     }
 }

@@ -36,8 +36,8 @@ public abstract class AbstractEngine implements Startable {
 
     @Override
     public String toString() {
-        return "type engine = " + typeEngine +
-                ", road tax rate = " + roadTaxRate;
+        return typeEngine +
+                "  " + roadTaxRate;
     }
 
     public String getTypeEngine() {
