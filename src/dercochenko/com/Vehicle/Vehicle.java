@@ -71,9 +71,9 @@ public class Vehicle {
 
     public double getTotalIncome() {
         double sum = 0;
-        for (int i = 0; i < rentList.size(); i++) {
-            if (rentList.get(i).getIdVehicle() == id) {
-                sum += rentList.get(i).getRentalPrice();
+        for (Rent rent : rentList) {
+            if (rent.getIdVehicle() == id) {
+                sum += rent.getRentalPrice();
             }
         }
         return sum;

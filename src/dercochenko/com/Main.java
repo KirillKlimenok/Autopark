@@ -24,7 +24,6 @@ public class Main {
         vehicles.stream().filter(x -> x.getCountDetected() > 0).forEach(System.out::println);
 
         vehicles.stream().filter(x -> x.getCountDetected() > 0).collect(Collectors.toList()).stream().sorted(Comparator.comparing(Vehicle::getCountDetected)).forEach(x -> System.out.println("Vehicle (" + x.getId() + ") have detected: " + x.getCountDetected() + "\n"));
-        //vehicles.forEach(myMechanic::repair);
 
         System.out.println("/".repeat(200) + "\n");
 
