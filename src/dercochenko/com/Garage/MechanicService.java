@@ -16,23 +16,29 @@ public class MechanicService implements Fixer {
     public Map<String, Integer> detectBreaking(Vehicle vehicle) {
         File file = new File(PATH);
         Map<String, Integer> vehicleDetailsBreaking = new HashMap<>();
+        StringBuilder vehicleDetected = new StringBuilder();
 
         try (FileWriter fileWriter = new FileWriter(file, true)) {
             int count = (int) (Math.random() * 8);
 
             if (count > 0) {
-                fileWriter.append(String.valueOf(vehicle.getId())).append(",");
+                vehicleDetected.append(vehicle.getId()).append(",");
                 for (int i = 0; i < count; i++) {
                     String detail = details[(int) (Math.random() * 8)];
                     int number = (int) (Math.random() * 4);
                     if (number > 0) {
-                        fileWriter.append(detail).append(",").append(String.valueOf(number)).append(',');
+                        vehicleDetected.append(detail).append(",").append(number).append(',');
                         vehicleDetailsBreaking.put(detail, number);
                     }
                 }
+                if (vehicleDetected.length() > 2) {
+                    vehicle.setClean(false);
+                    vehicle.setVehicleDetailsBreaking(vehicleDetailsBreaking);
 
-                vehicle.setVehicleDetailsBreaking(vehicleDetailsBreaking);
-                fileWriter.append("\n");
+                    fileWriter.append(String.valueOf(vehicleDetected));
+                    fileWriter.append("\n");
+                    fileWriter.flush();
+                }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -53,10 +59,13 @@ public class MechanicService implements Fixer {
 
             arrayList = arrayList.stream().filter(x -> Integer.parseInt(String.valueOf(x.charAt(0))) != vehicle.getId()).collect(Collectors.toList());
 
-            FileWriter fileWriter = new FileWriter(file, false);
+            vehicle.setVehicleDetailsBreaking(null);
+            FileWriter fileWriter = new FileWriter(file);
 
             for (String s : arrayList) {
-                fileWriter.append(s).append("\n");
+                fileWriter.write(s);
+                fileWriter.append('\n');
+                fileWriter.flush();
             }
 
         } catch (IOException e) {

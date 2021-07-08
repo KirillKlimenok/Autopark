@@ -1,14 +1,14 @@
 package dercochenko.com;
 
-import dercochenko.com.Garage.Garage;
+import dercochenko.com.Garage.CarWash;
 import dercochenko.com.Garage.MechanicService;
-import dercochenko.com.Vehicle.DefectedVehicleException;
 import dercochenko.com.Vehicle.Vehicle;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -17,61 +17,32 @@ public class Main {
 
         VehicleCollection vehicleCollection = new VehicleCollection("D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\types.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\vehicles.csv", "D:\\AutoparkNewVersion\\src\\dercochenko\\com\\db\\rents.csv");
         MechanicService myMechanic = new MechanicService();
-
         vehicleCollection.init();
 
-        Garage myGarage = new Garage();
+        List<Vehicle> vehicles = vehicleCollection.getVehicleList();
+        vehicles.forEach(myMechanic::detectBreaking);
+        vehicles.stream().filter(x -> x.getCountDetected() > 0).forEach(System.out::println);
 
-        myGarage.fullingGarage(vehicleCollection.getVehicleList());
+        vehicles.stream().filter(x -> x.getCountDetected() > 0).collect(Collectors.toList()).stream().sorted(Comparator.comparing(Vehicle::getCountDetected)).forEach(x -> System.out.println("Vehicle (" + x.getId() + ") have detected: " + x.getCountDetected() + "\n"));
+        //vehicles.forEach(myMechanic::repair);
 
-        for (Vehicle v :
-                vehicleCollection.getVehicleList()) {
-            if (myMechanic.detectAndRepair(v)) {
-                System.out.println("The car" + v.getId() + " is repaired");
-            } else {
-                System.out.println("The car" + v.getId() + " was not damaged");
+        System.out.println("/".repeat(200) + "\n");
+
+        List<Vehicle> max = vehicles.stream().max(Vehicle.VEHICLE_COMPARATOR_BY_TAX_PER_MONTH).stream().collect(Collectors.toList());
+        max.forEach(System.out::println);
+
+        System.out.println(vehicles.stream().filter(x -> x.getModelCar().split(" ")[0].equals("Volkswagen")).collect(Collectors.toList()).stream().max(Comparator.comparing(Vehicle::getManufactureYear)).get());
+
+        CarWash.getClearVehicle(vehicles);
+
+        System.out.println();
+
+        vehicles.forEach(x -> {
+            if (myMechanic.isBroken(x)) {
+                System.out.println("Vehicle" + x.getId() + " have broken");
+                myMechanic.repair(x);
             }
-        }
-
-        int maxCountDetect = 0;
-        int idVehicle = 0;
-
-        for (Vehicle v : vehicleCollection.getVehicleList()) {
-            if (maxCountDetect < v.getCountDetected()) {
-                maxCountDetect = v.getCountDetected();
-                idVehicle = v.getId();
-            }
-        }
-
-        System.out.println("Vehicle" + idVehicle + " has detected: " + maxCountDetect);
-
-        myGarage.garageRelease();
-
-        System.out.println("Do you want rent Auto" +
-                "\nthe cost of renting any car is 50$");
-
-
-        if (new Scanner(System.in).nextBoolean()) {
-            vehicleCollection.display();
-            RentAuto autoPark1 = new RentAuto(myMechanic);
-
-            System.out.println("enter vehicle: ");
-            try {
-                myMechanic.detectBreaking(vehicleCollection.getVehicle(2));
-                myMechanic.detectBreaking(vehicleCollection.getVehicle(3));
-                myMechanic.detectBreaking(vehicleCollection.getVehicle(4));
-
-                Vehicle v = vehicleCollection.getVehicle(new Scanner(System.in).nextInt());
-                System.out.println(v);
-                if (autoPark1.rentAuto(v, 50)) {
-                    System.out.println("successful");
-                }
-            } catch (DefectedVehicleException e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-
+        });
     }
 
     //this method initializes the file with vehicle

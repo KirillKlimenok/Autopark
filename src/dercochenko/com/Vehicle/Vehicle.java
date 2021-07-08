@@ -21,7 +21,9 @@ public class Vehicle {
     private final int id;
     private static List<Rent> rentList;
     public static final Comparator<Vehicle> VEHICLE_COMPARATOR = Comparator.comparing(Vehicle::getModelCar);
+    public static final Comparator<Vehicle> VEHICLE_COMPARATOR_BY_TAX_PER_MONTH = Comparator.comparing(Vehicle::getCalcTaxPerMonth);
     private Map<String, Integer> vehicleDetailsBreaking;
+    private boolean isClean = true;
 
     public static boolean setRentList(List<Rent> rent) {
         if (rent != null) {
@@ -75,6 +77,14 @@ public class Vehicle {
             }
         }
         return sum;
+    }
+
+    public boolean isClean() {
+        return isClean;
+    }
+
+    public void setClean(boolean clean) {
+        isClean = clean;
     }
 
     public double getTotalProfit() {
@@ -186,6 +196,10 @@ public class Vehicle {
             }
         }
         return countDetected;
+    }
+
+    public Map<String, Integer> getVehicleDetailsBreaking() {
+        return vehicleDetailsBreaking;
     }
 
     public void setVehicleDetailsBreaking(Map<String, Integer> vehicleDetailsBreaking) {
